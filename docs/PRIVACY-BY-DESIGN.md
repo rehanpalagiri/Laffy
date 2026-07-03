@@ -7,7 +7,7 @@ Laffy is a skincare-first routine builder with explicit data controls. This docu
 | Commitment | Where it lives |
 |---|---|
 | Face or scan data is never authorized through cookies or local storage alone | `src/pages/Consent.tsx` is a separate screen with an unchecked checkbox. There is no optional cookie UI in the current app. |
-| Raw photos are processed once and deleted by default | `src/pages/Capture.tsx` runs Canvas analysis locally via `analyzeImageFromSource`. The file/image element is never stored. |
+| Raw photos are processed once and deleted by default | `src/pages/Capture.tsx` runs Canvas analysis locally via `analyzeImageFromSource`. When optional cloud AI consent is enabled, a downscaled image may be sent to the configured Gemini endpoint for that scan result only. |
 | Optional save-history stores derived scan metrics only | `AssessmentContext` writes only `ScanSignals` to `localStorage` under `lumaroutine.scan.v1`, gated on `consent.saveScanHistory`. |
 | No facial recognition or biometric templates | `src/lib/imageAnalysis.ts` computes only luminance/color/variance proxies. There is no embedding, template, identity comparison, or face-geometry export. |
 | No age/gender/ethnicity/emotion/attractiveness inference | Code does not exist and the out-of-scope behavior is listed in `src/pages/Capture.tsx`. |
@@ -18,16 +18,17 @@ Laffy is a skincare-first routine builder with explicit data controls. This docu
 ## Data Classes
 
 1. Cosmetic image: used once, in-browser, then released. Never persisted by default.
-2. Scan signals: small numeric `ScanSignals` struct. In memory by default; stored only with explicit opt-in for up to 30 days.
-3. Questionnaire answers: `AssessmentInput`, persisted in `localStorage` for UX continuity.
-4. Consent record: `ConsentState` with timestamps, persisted for audit traceability.
-5. Local export bundle: generated on demand by `src/lib/dataExport.ts`.
+2. Optional cloud AI image: downscaled and sent to Gemini only with explicit cloud AI consent. Laffy does not store the raw image by default.
+3. Scan signals: small numeric `ScanSignals` struct. In memory by default; stored only with explicit opt-in for up to 30 days.
+4. Questionnaire answers: `AssessmentInput`, persisted in `localStorage` for UX continuity.
+5. Consent record: `ConsentState` with timestamps, persisted for audit traceability.
+6. Local export bundle: generated on demand by `src/lib/dataExport.ts`.
 
 ## Export Contract
 
 The Privacy Center can export CSV or JSON generated locally in the browser. Exports include:
 
-- Consent state: necessary local-storage state, GPC flag, age gate, face-scan consent, scan-history consent, aggregate contribution, and consent timestamp.
+- Consent state: necessary local-storage state, GPC flag, age gate, face-scan consent, cloud AI consent, scan-history consent, aggregate contribution, and consent timestamp.
 - Questionnaire answers: goals, skin feel, sensitivity, allergies, fragrance preference, pregnancy-conservative mode, and budget.
 - Cosmetic scan metrics: quality, reliability, shine proxy, redness-color proxy, texture-variance proxy, dark-spot-contrast proxy, lighting, blur, framing, overexposure, and quality issues.
 - Safeguard fields: `raw_photo_included=false`, `biometric_identifier_included=false`, `biometric_template_included=false`, `face_geometry_included=false`, and `export_generated_locally=true`.

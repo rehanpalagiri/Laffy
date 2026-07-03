@@ -35,6 +35,7 @@ export default function PrivacyCenter() {
   const consentSummary = [
     ["Age Confirmed", consent.ageConfirmed18],
     ["Face Scan", consent.faceScan],
+    ["Cloud AI", consent.cloudAiAnalysis],
     ["Scan Accuracy", consent.aggregateContribution],
   ] as const;
 
@@ -79,7 +80,7 @@ export default function PrivacyCenter() {
                 CSV and JSON exports include consent, questionnaire answers, metadata, scores, and result fields.
               </TrustNote>
               <TrustNote title="Photo-conscious">
-                Export files do not include raw image data or biometric templates.
+                Export files do not include raw image data or biometric templates. Cloud AI analysis only runs when you opt in on the scan consent screen.
               </TrustNote>
               <TrustNote title="Reversible choices">
                 You can revoke scan consent or clear saved scan signals without changing your legal access to privacy notices.
@@ -99,9 +100,17 @@ export default function PrivacyCenter() {
             <ActionCard
               icon={<SlidersHorizontal className="h-5 w-5" />}
               title="Revoke Face-Scan Consent"
-              onClick={() => setConsent({ faceScan: false, saveScanHistory: false })}
+              onClick={() => setConsent({ faceScan: false, cloudAiAnalysis: false, saveScanHistory: false })}
             >
-              Stops future photo analysis and turns off saved scan history on this device.
+              Stops future photo analysis, cloud AI analysis, and saved scan history on this device.
+            </ActionCard>
+            <ActionCard
+              icon={<SlidersHorizontal className="h-5 w-5" />}
+              title="Cloud AI Analysis"
+              onClick={() => setConsent({ cloudAiAnalysis: !consent.cloudAiAnalysis })}
+              detail={consent.cloudAiAnalysis ? "Currently on" : "Currently off"}
+            >
+              Choose whether new scans may send a downscaled image to Gemini for richer cosmetic analysis.
             </ActionCard>
             <ActionCard
               icon={<RotateCcw className="h-5 w-5" />}

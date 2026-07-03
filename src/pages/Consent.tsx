@@ -8,7 +8,8 @@ export default function Consent() {
   const navigate = useNavigate();
   const { consent, setConsent } = useAssessment();
   const [scanOk, setScanOk] = useState(false);
-  const [improvement, setImprovement] = useState(true);
+  const [cloudAi, setCloudAi] = useState<boolean>(consent.cloudAiAnalysis);
+  const [improvement, setImprovement] = useState<boolean>(consent.aggregateContribution);
 
   if (!consent.ageConfirmed18) {
     return (
@@ -23,7 +24,7 @@ export default function Consent() {
 
   const proceedWithScan = () => {
     if (!scanOk) return;
-    setConsent({ faceScan: true, saveScanHistory: false, aggregateContribution: improvement });
+    setConsent({ faceScan: true, cloudAiAnalysis: cloudAi, saveScanHistory: false, aggregateContribution: improvement });
     navigate("/capture");
   };
 
@@ -62,6 +63,21 @@ export default function Consent() {
               <span className="block font-extrabold">I Consent</span>
               <span className="mt-1 block text-sm leading-6 text-muted-foreground">
                 I agree to let Laffy process my scan to generate my skin analysis and personalized routine.
+              </span>
+            </span>
+          </label>
+
+          <label className="surface-card flex cursor-pointer items-start gap-4 p-5 transition hover:-translate-y-0.5 hover:shadow-lift">
+            <input
+              type="checkbox"
+              className="mt-1 h-4 w-4 accent-primary"
+              checked={cloudAi}
+              onChange={(event) => setCloudAi(event.target.checked)}
+            />
+            <span>
+              <span className="block font-extrabold">Cloud AI Analysis</span>
+              <span className="mt-1 block text-sm leading-6 text-muted-foreground">
+                Allow Laffy to send one downscaled scan image to Gemini so the report can include a richer AI review. If this is off, Laffy uses local browser analysis only.
               </span>
             </span>
           </label>

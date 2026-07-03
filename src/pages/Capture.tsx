@@ -89,7 +89,10 @@ export default function Capture() {
     setIssues([]);
     setCaptureMessage("Scan captured. Analyzing your skin...");
     try {
-      const result = await analyzeSkinScan(source, assessment, { consentStatus: consent.faceScan });
+      const result = await analyzeSkinScan(source, assessment, {
+        consentStatus: consent.faceScan,
+        cloudAiConsent: consent.cloudAiAnalysis,
+      });
       if (!result.faceDetected) {
         setIssues(["We could not clearly detect your face. Center your face and try again."]);
         setFaceState({ status: "no-face", message: "We could not clearly detect your face. Center your face and try again." });

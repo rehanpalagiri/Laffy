@@ -4,6 +4,7 @@ export interface ConsentState {
   cookiesChoice: "essential" | "custom" | "accept-all" | null;
   analytics: boolean;
   faceScan: boolean;            // explicit face-scan consent
+  cloudAiAnalysis: boolean;     // optional external AI processing consent
   saveScanHistory: boolean;     // optional, default off
   aggregateContribution: boolean; // optional, default off
   ageConfirmed18: boolean;
@@ -17,6 +18,7 @@ export const DEFAULT_CONSENT: ConsentState = {
   cookiesChoice: null,
   analytics: false,
   faceScan: false,
+  cloudAiAnalysis: false,
   saveScanHistory: false,
   aggregateContribution: false,
   ageConfirmed18: false,
