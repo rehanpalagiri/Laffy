@@ -64,10 +64,7 @@ export interface ScanSignals {
   scores?: ScanScores;
   suggestedRoutineFocus?: string[];
   recommendedHabits?: string[];
-  analysisProvider?: "local-browser" | "external-agent" | "gemini-vision";
-  analysisModel?: string;
-  analysisConfidence?: number;
-  analysisWarnings?: string[];
+  analysisProvider?: "local-browser" | "external-agent";
   qualityDetail?: {
     lighting: number;
     blur: number;

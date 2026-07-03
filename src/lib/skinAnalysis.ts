@@ -13,7 +13,6 @@ interface AnalysisMeta {
   sessionId?: string;
   capturedAt?: string;
   consentStatus?: boolean;
-  cloudAiConsent?: boolean;
 }
 
 export async function analyzeSkinScan(
@@ -27,26 +26,21 @@ export async function analyzeSkinScan(
   const localReport = buildStructuredSkinAnalysis(localSignals, questionnaireData, { sessionId, capturedAt });
   const endpoint = getAnalysisEndpoint();
 
-  if (!endpoint || !meta.cloudAiConsent) return localReport;
+  if (!endpoint) return localReport;
 
   try {
     const image = await sourceToDataUrl(source);
-    const controller = new AbortController();
-    const timeout = window.setTimeout(() => controller.abort(), 12000);
     const response = await fetch(endpoint, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      signal: controller.signal,
       body: JSON.stringify({
         image,
         questionnaireData,
-        localSignals: localReport,
         timestamp: capturedAt,
         sessionId,
         consentStatus: Boolean(meta.consentStatus),
-        cloudAiConsent: Boolean(meta.cloudAiConsent),
       }),
-    }).finally(() => window.clearTimeout(timeout));
+    });
 
     if (!response.ok) return localReport;
     const payload = await response.json();
@@ -100,10 +94,7 @@ function normalizeExternalAnalysis(payload: unknown, fallback: ScanSignals): Sca
     improvements: data.improvements ?? fallback.improvements,
     suggestedRoutineFocus: data.suggestedRoutineFocus ?? fallback.suggestedRoutineFocus,
     recommendedHabits: data.recommendedHabits ?? fallback.recommendedHabits,
-    analysisProvider: data.analysisProvider ?? "external-agent",
-    analysisModel: data.analysisModel ?? fallback.analysisModel,
-    analysisConfidence: data.analysisConfidence ?? fallback.analysisConfidence,
-    analysisWarnings: data.analysisWarnings ?? fallback.analysisWarnings,
+    analysisProvider: "external-agent",
   };
 }
 
@@ -266,7 +257,7 @@ async function sourceToDataUrl(source: ScanSource): Promise<string> {
 }
 
 function getAnalysisEndpoint(): string {
-  return import.meta.env.VITE_SKIN_ANALYSIS_ENDPOINT?.trim() || "/api/skin-analysis";
+  return import.meta.env.VITE_SKIN_ANALYSIS_ENDPOINT?.trim() ?? "";
 }
 
 function createSessionId(): string {

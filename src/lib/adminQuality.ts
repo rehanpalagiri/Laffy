@@ -77,7 +77,7 @@ export function buildAdminQualityRecord(input: {
     blurScore: round(scan.qualityDetail?.blur ?? scan.quality),
     lightingScore: round(scan.qualityDetail?.lighting ?? scan.quality),
     framingScore: round(scan.qualityDetail?.framing ?? scan.quality),
-    aiConfidenceScore: round(scan.analysisConfidence ?? (scan.reliable ? scan.quality : scan.quality * 0.55)),
+    aiConfidenceScore: round(scan.reliable ? scan.quality : scan.quality * 0.55),
     detectedConcerns: Array.from(new Set(detectedConcerns)),
     budgetRange: assessment.budget,
     skinFeel: assessment.skinFeel,
@@ -89,7 +89,7 @@ export function buildAdminQualityRecord(input: {
     errorFlags,
     falsePositiveFlags,
     adminReviewStatus: scanStatus === "successful" ? "cleared" : "review-needed",
-    modelVersion: scan.analysisModel ?? (scan.analysisProvider === "gemini-vision" ? "gemini-vision" : MODEL_VERSION),
+    modelVersion: MODEL_VERSION,
     recommendationEngineVersion: RECOMMENDATION_ENGINE_VERSION,
   };
 }
