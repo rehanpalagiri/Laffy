@@ -1,0 +1,347 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;500;600;700;800;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Laffy design system — pink, cream, soft white, and warm charcoal.
+   All colors HSL, all tokens semantic. Never hardcode in components. */
+
+@layer base {
+  :root {
+    /* Surfaces */
+    --background: 37 100% 96%;
+    --foreground: 323 9% 13%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 220 18% 16%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 18% 16%;
+
+    /* Brand */
+    --primary: 341 84% 83%;        /* Laffy Pink #F8AFC6 */
+    --primary-foreground: 323 9% 13%;
+    --primary-soft: 341 84% 94%;
+
+    --secondary: 45 100% 89%;      /* Laffy Cream #FFF1C8 */
+    --secondary-foreground: 323 9% 13%;
+    --secondary-soft: 45 100% 95%;
+
+    --muted: 32 100% 98%;
+    --muted-foreground: 332 6% 41%;
+
+    --accent: 45 100% 89%;
+    --accent-foreground: 323 9% 13%;
+
+    --destructive: 8 65% 48%;
+    --destructive-foreground: 38 40% 97%;
+
+    --success: 152 35% 36%;
+    --warning: 32 75% 46%;
+
+    --border: 337 24% 89%;
+    --input: 337 24% 89%;
+    --ring: 341 84% 72%;
+
+    --radius: 1rem;
+
+    /* Gradients */
+    --gradient-hero:
+      radial-gradient(circle at 78% 20%, hsl(341 84% 83% / 0.38), transparent 28%),
+      radial-gradient(circle at 15% 80%, hsl(45 100% 89% / 0.72), transparent 34%),
+      linear-gradient(180deg, hsl(28 100% 99%) 0%, hsl(37 100% 96%) 54%, hsl(45 100% 94%) 100%);
+    --gradient-soft: linear-gradient(135deg, hsl(0 0% 100%) 0%, hsl(45 100% 95%) 52%, hsl(341 84% 96%) 100%);
+    --gradient-cream: linear-gradient(135deg, hsl(341 84% 94%) 0%, hsl(45 100% 90%) 100%);
+    --gradient-brand: linear-gradient(135deg, hsl(341 84% 83%) 0%, hsl(341 72% 72%) 100%);
+    --gradient-texture: linear-gradient(135deg, hsl(0 0% 100%) 0%, hsl(45 100% 96%) 48%, hsl(341 84% 96%) 100%);
+
+    /* Shadows */
+    --shadow-soft: 0 1px 2px hsl(323 9% 13% / 0.04), 0 10px 26px -12px hsl(341 84% 60% / 0.22);
+    --shadow-card: 0 1px 3px hsl(323 9% 13% / 0.06), 0 18px 52px -24px hsl(341 84% 62% / 0.24);
+    --shadow-lift: 0 2px 8px hsl(323 9% 13% / 0.08), 0 28px 70px -22px hsl(341 84% 58% / 0.30);
+
+    /* Motion */
+    --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+    --transition-base: 240ms var(--ease-out-soft);
+
+    --sidebar-background: 37 100% 96%;
+    --sidebar-foreground: 323 9% 13%;
+    --sidebar-primary: 341 84% 83%;
+    --sidebar-primary-foreground: 323 9% 13%;
+    --sidebar-accent: 45 100% 89%;
+    --sidebar-accent-foreground: 323 9% 13%;
+    --sidebar-border: 337 24% 89%;
+    --sidebar-ring: 341 84% 72%;
+  }
+
+  /* Dark mode stays inside the same pink, cream, and warm neutral brand system. */
+  .dark {
+    --background: 323 14% 10%;
+    --foreground: 37 80% 96%;
+    --card: 323 12% 13%;
+    --card-foreground: 37 80% 96%;
+    --popover: 323 12% 13%;
+    --popover-foreground: 37 80% 96%;
+    --primary: 341 84% 83%;
+    --primary-foreground: 323 9% 13%;
+    --secondary: 45 100% 89%;
+    --secondary-foreground: 323 9% 13%;
+    --muted: 323 10% 18%;
+    --muted-foreground: 337 18% 76%;
+    --accent: 341 48% 20%;
+    --accent-foreground: 45 100% 92%;
+    --destructive: 8 65% 48%;
+    --destructive-foreground: 38 30% 94%;
+    --border: 337 18% 24%;
+    --input: 337 18% 24%;
+    --ring: 341 84% 72%;
+    --sidebar-background: 323 14% 10%;
+    --sidebar-foreground: 37 80% 96%;
+    --sidebar-primary: 341 84% 83%;
+    --sidebar-primary-foreground: 323 9% 13%;
+    --sidebar-accent: 341 48% 20%;
+    --sidebar-accent-foreground: 45 100% 92%;
+    --sidebar-border: 337 18% 24%;
+    --sidebar-ring: 341 84% 72%;
+  }
+}
+
+@layer base {
+  * { @apply border-border; }
+  html { scroll-behavior: smooth; }
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Nunito Sans', system-ui, sans-serif;
+    font-feature-settings: "ss01", "cv11";
+  }
+  h1, h2, h3, h4 {
+    font-family: 'Nunito Sans', system-ui, sans-serif;
+    font-weight: 800;
+    letter-spacing: 0;
+  }
+  :focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  }
+}
+
+@layer components {
+  .surface-card {
+    @apply rounded-3xl bg-card/95 border border-border/70;
+    box-shadow: var(--shadow-card);
+  }
+  .surface-soft {
+    background: var(--gradient-soft);
+    @apply rounded-3xl border border-border/40;
+  }
+  .surface-hero {
+    background: var(--gradient-hero);
+  }
+  .surface-texture {
+    background: var(--gradient-texture), hsl(var(--card));
+  }
+  .text-display {
+    font-family: 'Nunito Sans', system-ui, sans-serif;
+    font-weight: 900;
+    @apply text-4xl leading-[1.02] md:text-6xl;
+  }
+  .text-eyebrow {
+    @apply text-xs uppercase tracking-[0.18em] text-muted-foreground font-medium;
+  }
+  .container-prose {
+    @apply mx-auto max-w-3xl px-5;
+  }
+  .container-page {
+    @apply mx-auto max-w-6xl px-5 md:px-8;
+  }
+  .cta-primary {
+    @apply inline-flex items-center justify-center gap-2 bg-primary shadow-soft transition duration-300;
+    box-shadow: 0 14px 34px -16px hsl(var(--primary) / 0.86), 0 0 0 1px hsl(0 0% 100% / 0.55) inset;
+  }
+  .cta-primary:hover {
+    transform: translateY(-2px) scale(1.01);
+    box-shadow: 0 20px 52px -16px hsl(var(--primary) / 0.95), 0 0 0 1px hsl(0 0% 100% / 0.72) inset;
+  }
+  .cta-primary:active {
+    transform: translateY(0) scale(0.99);
+  }
+  .scan-card {
+    @apply rounded-[2rem] border border-border/70 bg-card p-3 shadow-lift;
+  }
+  .scan-preview-card {
+    @apply rounded-[2.25rem] border border-border/60 bg-card p-3 shadow-lift;
+    transform: perspective(1200px) rotateY(-5deg) rotateX(2deg);
+  }
+  .scan-vignette {
+    @apply pointer-events-none absolute inset-0;
+    background:
+      linear-gradient(to bottom, hsl(var(--foreground) / 0.08), transparent 22%, transparent 72%, hsl(var(--foreground) / 0.12)),
+      radial-gradient(ellipse at center, transparent 48%, hsl(var(--foreground) / 0.18) 100%);
+  }
+  .face-guide {
+    @apply pointer-events-none absolute left-1/2 top-1/2 h-[68%] w-[48%] -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-dashed border-card/85 transition-all duration-300;
+    box-shadow: 0 0 0 999px hsl(var(--foreground) / 0.08), 0 0 40px hsl(var(--primary) / 0.1);
+  }
+  .face-guide-ready {
+    @apply border-primary;
+    box-shadow: 0 0 0 999px hsl(var(--foreground) / 0.05), 0 0 46px hsl(var(--primary) / 0.45);
+  }
+  .scan-line {
+    @apply absolute inset-x-8 h-px bg-primary/70;
+    top: 18%;
+    animation: scan-line 3.4s ease-in-out infinite;
+    box-shadow: 0 0 24px hsl(var(--primary) / 0.45);
+  }
+  .before-after-frame {
+    @apply relative aspect-[4/3] overflow-hidden rounded-[1.5rem] bg-muted;
+  }
+  .final-cta {
+    @apply flex flex-col gap-6 rounded-[2rem] border border-border/60 bg-card p-8 shadow-card md:flex-row md:items-center md:justify-between md:p-10;
+    background: var(--gradient-texture), hsl(var(--card));
+  }
+  .result-hero {
+    @apply grid gap-6 rounded-[2rem] border border-border/60 bg-card p-7 shadow-card md:grid-cols-[1fr_190px] md:items-center md:p-10;
+    background: var(--gradient-soft);
+  }
+  .result-score-orb {
+    @apply flex aspect-square w-40 flex-col items-center justify-center rounded-full bg-primary text-center text-primary-foreground shadow-lift md:justify-self-end;
+  }
+  .result-score-orb span {
+    @apply font-display text-5xl leading-none;
+  }
+  .result-score-orb small {
+    @apply mt-2 max-w-24 text-xs leading-4 text-primary-foreground/85;
+  }
+  .choice-card {
+    @apply flex min-h-14 items-center justify-between gap-3 rounded-2xl border border-border bg-card p-4 text-left text-sm transition duration-300 hover:-translate-y-0.5 hover:border-primary/70 hover:bg-primary-soft/45 hover:shadow-soft;
+  }
+  .choice-card-selected {
+    @apply border-primary bg-primary-soft shadow-soft;
+  }
+  .review-marquee {
+    @apply overflow-hidden;
+    mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+  }
+  .review-marquee-track {
+    @apply flex w-max gap-4 pl-5 md:pl-8;
+    animation: review-marquee 96s linear infinite;
+  }
+  .review-marquee:hover .review-marquee-track {
+    animation-play-state: paused;
+  }
+  .before-after-strip {
+    @apply flex gap-4 overflow-x-auto pb-4;
+    scroll-snap-type: x mandatory;
+  }
+  .before-after-strip > * {
+    scroll-snap-align: start;
+  }
+  .bundle-price-card {
+    @apply rounded-[2rem] border border-primary/25 bg-card p-6 shadow-lift;
+    background: linear-gradient(135deg, hsl(var(--card)) 0%, hsl(var(--primary-soft) / 0.55) 100%);
+  }
+  .product-visual {
+    @apply relative flex aspect-[4/3] items-center justify-center overflow-hidden;
+  }
+  .product-visual::before {
+    content: "";
+    @apply absolute inset-6 rounded-full border border-card/70;
+  }
+  .product-bottle {
+    @apply relative h-28 w-16 rounded-2xl border border-card/70 bg-card/70 shadow-lift;
+  }
+  .product-bottle::before {
+    content: "";
+    @apply absolute left-1/2 top-[-18px] h-6 w-8 -translate-x-1/2 rounded-t-lg bg-card/80;
+  }
+  .scroll-reveal {
+    animation: laffy-reveal 700ms var(--ease-out-soft) both;
+  }
+  @supports (animation-timeline: view()) {
+    .scroll-reveal {
+      animation-timeline: view();
+      animation-range: entry 0% cover 28%;
+    }
+  }
+  .laffy-cursor {
+    @apply pointer-events-none fixed left-0 top-0 z-[9999] hidden h-4 w-4 rounded-full border border-primary/70 bg-primary/40 mix-blend-multiply transition-[height,width,background-color,border-color,opacity] duration-200;
+    transform: translate3d(-50%, -50%, 0);
+  }
+  .laffy-cursor-active {
+    @apply h-10 w-10 border-secondary bg-secondary/35;
+  }
+  .laffy-orb-stage {
+    @apply relative mx-auto aspect-square w-full max-w-[420px] rounded-[3rem];
+    perspective: 1100px;
+  }
+  .laffy-orb-core {
+    @apply absolute inset-[12%] rounded-[38%] shadow-lift;
+    background:
+      radial-gradient(circle at 34% 26%, hsl(0 0% 100% / 0.92), transparent 22%),
+      radial-gradient(circle at 66% 72%, hsl(var(--secondary) / 0.92), transparent 26%),
+      linear-gradient(145deg, hsl(var(--primary)) 0%, hsl(var(--secondary)) 100%);
+    transform-style: preserve-3d;
+    animation: laffy-float 7s ease-in-out infinite;
+  }
+  .laffy-orb-ring {
+    @apply absolute inset-[6%] rounded-full border border-primary/35;
+    transform: rotateX(68deg) rotateZ(-18deg);
+    box-shadow: 0 0 60px hsl(var(--primary) / 0.28);
+  }
+  .laffy-capsule {
+    @apply absolute rounded-full border border-card/70 shadow-card;
+    background: linear-gradient(135deg, hsl(var(--card) / 0.9), hsl(var(--secondary) / 0.86));
+  }
+  .laffy-capsule-one {
+    @apply left-[5%] top-[20%] h-16 w-32 rotate-[-18deg];
+    animation: laffy-drift 8s ease-in-out infinite;
+  }
+  .laffy-capsule-two {
+    @apply bottom-[15%] right-[2%] h-14 w-28 rotate-[18deg];
+    animation: laffy-drift 9s ease-in-out infinite reverse;
+  }
+}
+
+@keyframes scan-line {
+  0%, 100% { top: 18%; opacity: 0.35; }
+  50% { top: 76%; opacity: 0.95; }
+}
+
+@keyframes review-marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+@keyframes laffy-reveal {
+  from { opacity: 0; transform: translateY(18px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes laffy-float {
+  0%, 100% { transform: translateY(0) rotateX(4deg) rotateY(-8deg); border-radius: 38% 44% 42% 36%; }
+  50% { transform: translateY(-12px) rotateX(-2deg) rotateY(12deg); border-radius: 45% 34% 40% 48%; }
+}
+
+@keyframes laffy-drift {
+  0%, 100% { transform: translateY(0) rotate(var(--tw-rotate)); }
+  50% { transform: translateY(-14px) rotate(var(--tw-rotate)); }
+}
+
+@media (pointer: fine) and (min-width: 900px) {
+  body.laffy-cursor-enabled {
+    cursor: none;
+  }
+  body.laffy-cursor-enabled a,
+  body.laffy-cursor-enabled button,
+  body.laffy-cursor-enabled label,
+  body.laffy-cursor-enabled input,
+  body.laffy-cursor-enabled textarea {
+    cursor: none;
+  }
+  .laffy-cursor {
+    @apply block;
+  }
+}
