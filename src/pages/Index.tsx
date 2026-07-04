@@ -1,32 +1,84 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Camera, ClipboardList, PackageCheck, ScanFace } from "lucide-react";
+import {
+  ArrowRight,
+  BadgeCheck,
+  Camera,
+  ClipboardList,
+  PackageCheck,
+  ScanFace,
+  ShieldCheck,
+  SlidersHorizontal,
+  Sparkles,
+  type LucideIcon,
+} from "lucide-react";
 import { Layout } from "@/components/Layout";
 import { ReviewsSection } from "@/components/ReviewsSection";
 
-const PROCESS_STEPS = [
+interface Chapter {
+  number: string;
+  label: string;
+  title: string;
+  copy: string;
+  detail: string;
+  icon: LucideIcon;
+  proof: string[];
+}
+
+const CHAPTERS: Chapter[] = [
   {
-    title: "Scan Your Skin",
-    copy: "Upload a clear face photo so Laffy can understand visible skin concerns.",
+    number: "001",
+    label: "Scan",
+    title: "A face scan that reads like a map, not a mystery.",
+    copy: "Upload one clear photo after consent and Laffy turns visible concerns into an easy zone-by-zone summary.",
+    detail: "The scan separates visible signals across areas like cheeks, forehead, chin, and T-zone so the routine starts from what is actually showing.",
     icon: Camera,
+    proof: ["Zone readout", "Strengths first", "Cosmetic only"],
   },
   {
-    title: "Answer a Few Questions",
-    copy: "Tell us about your skin type, goals, sensitivity, budget, and routine style.",
+    number: "002",
+    label: "Goals",
+    title: "Your skin goals shape the recommendation.",
+    copy: "A short questionnaire adds the context a photo cannot see: skin type, sensitivity, budget, and how much routine you will actually follow.",
+    detail: "Instead of forcing a long quiz, Laffy uses only the answers that change the final box.",
+    icon: SlidersHorizontal,
+    proof: ["Skin type", "Sensitivity", "Budget fit"],
+  },
+  {
+    number: "003",
+    label: "Routine",
+    title: "Every product gets a reason.",
+    copy: "The result is not a random product list. Each pick is tied to one visible concern, one goal, or one constraint you gave Laffy.",
+    detail: "Your routine is organized by role so the next step feels obvious: cleanse, treat, hydrate, protect.",
     icon: ClipboardList,
+    proof: ["Why picked", "Routine role", "Simple order"],
   },
   {
-    title: "Get Your Routine Box",
-    copy: "We build a curated skincare box around your scan and answers.",
+    number: "004",
+    label: "Box",
+    title: "A curated box without the crowded shelf.",
+    copy: "Laffy keeps the box focused around what your scan and answers can support, then leaves room to adjust as your skin changes.",
+    detail: "The goal is clarity: fewer products, clearer reasons, and a routine you can repeat.",
     icon: PackageCheck,
+    proof: ["Curated set", "Clear next step", "Adjustable"],
   },
-] as const;
+];
+
+const ROUTINE_PICKS = [
+  { role: "Cleanse", why: "Keeps the scan routine gentle before treatment steps." },
+  { role: "Treat", why: "Targets the highest-priority visible concern first." },
+  { role: "Hydrate", why: "Balances dryness or sensitivity signals from your answers." },
+  { role: "Protect", why: "Keeps the routine practical for daytime use." },
+];
+
+const SIGNALS = ["T-zone", "Cheeks", "Texture", "Tone", "Hydration", "Sensitivity"];
 
 export default function Index() {
   return (
     <Layout>
       <Hero />
-      <ProcessSection />
+      <ChapterSection />
+      <RoutineLogic />
       <ReviewsSection />
     </Layout>
   );
@@ -34,89 +86,181 @@ export default function Index() {
 
 function Hero() {
   return (
-    <section className="surface-hero overflow-hidden">
-      <div className="container-page grid min-h-[calc(100vh-4rem)] gap-10 py-14 md:grid-cols-[minmax(0,1fr)_430px] md:items-center md:py-20">
-        <div className="animate-fade-up">
-          <div className="text-eyebrow">Laffy AI Skincare</div>
-          <h1 className="text-display mt-3 max-w-4xl">Your Skin Scan. Your Routine. Your Box.</h1>
-          <p className="mt-5 max-w-2xl text-lg leading-8 text-muted-foreground">
+    <section className="premium-hero overflow-hidden">
+      <div className="container-page relative grid min-h-[calc(100svh-4rem)] gap-10 py-14 md:grid-cols-[minmax(0,1fr)_minmax(360px,480px)] md:items-center md:py-20">
+        <div className="laffy-wordmark" aria-hidden>
+          Laffy
+        </div>
+        <div className="relative z-10 animate-fade-up">
+          <div className="chapter-kicker">
+            <span>001</span>
+            Laffy AI skincare
+          </div>
+          <h1 className="text-display mt-5 max-w-5xl text-[clamp(3rem,6.2vw,5.75rem)]">
+            Your Skin Scan. Your Routine. Your Box.
+          </h1>
+          <p className="mt-6 max-w-2xl text-lg leading-8 text-muted-foreground md:text-xl">
             Laffy scans your skin, asks a few quick questions, and builds a personalized skincare box around your goals.
           </p>
-          <div className="mt-8">
+          <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center">
             <Link to="/start" className="cta-primary h-14 rounded-full px-8 text-base font-extrabold text-primary-foreground">
               <ScanFace className="h-5 w-5" />
               Start Your Scan
             </Link>
+            <a href="#chapters" className="cta-ghost h-14 rounded-full px-7 text-base font-extrabold">
+              See the system
+              <ArrowRight className="h-5 w-5" />
+            </a>
           </div>
-          <p className="mt-5 max-w-md text-sm leading-6 text-muted-foreground">
+          <p className="mt-5 flex max-w-md items-start gap-2 text-sm leading-6 text-muted-foreground">
+            <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-foreground" />
             Cosmetic guidance only. Your scan runs after clear consent.
           </p>
         </div>
-        <LaffyHeroObject />
+        <SkinTwinVisual />
       </div>
     </section>
   );
 }
 
-function LaffyHeroObject() {
+function SkinTwinVisual() {
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
 
   return (
     <div
-      className="laffy-orb-stage scroll-reveal"
+      className="skin-twin-stage scroll-reveal"
       data-cursor="soft"
       onMouseMove={(event) => {
         const rect = event.currentTarget.getBoundingClientRect();
         setTilt({
-          x: ((event.clientY - rect.top) / rect.height - 0.5) * -12,
-          y: ((event.clientX - rect.left) / rect.width - 0.5) * 12,
+          x: ((event.clientY - rect.top) / rect.height - 0.5) * -10,
+          y: ((event.clientX - rect.left) / rect.width - 0.5) * 10,
         });
       }}
       onMouseLeave={() => setTilt({ x: 0, y: 0 })}
-      aria-hidden
+      aria-label="Laffy scan and routine visualization"
     >
-      <div className="laffy-orb-ring" />
-      <div
-        className="laffy-orb-core"
-        style={{ transform: `rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)` }}
-      />
-      <div className="laffy-capsule laffy-capsule-one" />
-      <div className="laffy-capsule laffy-capsule-two" />
-      <div className="absolute left-[18%] top-[70%] rounded-full border border-border/70 bg-card/75 px-4 py-2 text-sm font-bold shadow-card backdrop-blur">
-        Skin Scan
-      </div>
-      <div className="absolute right-[5%] top-[12%] rounded-full border border-border/70 bg-card/75 px-4 py-2 text-sm font-bold shadow-card backdrop-blur">
-        Routine Box
+      <div className="skin-twin-shell" style={{ transform: `rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)` }}>
+        <div className="skin-twin-orb">
+          <span className="scan-zone scan-zone-one" />
+          <span className="scan-zone scan-zone-two" />
+          <span className="scan-zone scan-zone-three" />
+          <span className="scan-sweep" />
+        </div>
+        <div className="routine-box">
+          <span />
+          <strong>Routine Box</strong>
+          <small>4 focused steps</small>
+        </div>
+        <div className="ingredient-chip ingredient-chip-one">Hydrate</div>
+        <div className="ingredient-chip ingredient-chip-two">Brighten</div>
+        <div className="ingredient-chip ingredient-chip-three">Balance</div>
       </div>
     </div>
   );
 }
 
-function ProcessSection() {
+function ChapterSection() {
   return (
-    <section className="border-y border-border/60 bg-card/55">
-      <div className="container-page py-14 md:py-16">
-        <div className="max-w-2xl scroll-reveal">
-          <div className="text-eyebrow">How It Works</div>
-          <h2 className="font-display mt-2 text-3xl font-extrabold md:text-4xl">Three steps. One personal routine.</h2>
-          <p className="mt-4 text-muted-foreground">
-            A short guided flow keeps the scan useful without turning skincare into homework.
+    <section id="chapters" className="chapter-section border-y border-border/60">
+      <div className="container-page py-16 md:py-24">
+        <div className="grid gap-8 md:grid-cols-[0.95fr_1.25fr] md:items-end">
+          <div className="scroll-reveal">
+            <div className="chapter-kicker">
+              <span>System</span>
+              Product logic
+            </div>
+            <h2 className="font-display mt-4 text-4xl font-black leading-[0.98] md:text-6xl">
+              Four chapters, one calm routine.
+            </h2>
+          </div>
+          <p className="scroll-reveal max-w-2xl text-base leading-8 text-muted-foreground md:text-lg">
+            The best skincare tech disappears into decisions that feel clear. Laffy moves from scan to box without making the user decode a dashboard.
           </p>
         </div>
 
-        <div className="mt-10 grid gap-5 md:grid-cols-3">
-          {PROCESS_STEPS.map((step, index) => (
-            <article key={step.title} className="surface-card scroll-reveal p-6">
-              <div className="flex items-center justify-between gap-4">
-                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary-soft text-primary-foreground shadow-soft">
-                  <step.icon className="h-5 w-5" />
-                </div>
-                <span className="rounded-full bg-secondary-soft px-3 py-1 text-xs font-bold text-muted-foreground">Step {index + 1}</span>
-              </div>
-              <h3 className="mt-5 text-xl font-extrabold">{step.title}</h3>
-              <p className="mt-2 text-sm leading-6 text-muted-foreground">{step.copy}</p>
-            </article>
+        <div className="mt-12 grid gap-4">
+          {CHAPTERS.map((chapter) => (
+            <ChapterCard key={chapter.number} chapter={chapter} />
           ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function ChapterCard({ chapter }: { chapter: Chapter }) {
+  return (
+    <article className="chapter-card scroll-reveal">
+      <div className="chapter-number">{chapter.number}</div>
+      <div className="chapter-icon">
+        <chapter.icon className="h-5 w-5" />
+      </div>
+      <div>
+        <div className="text-eyebrow">{chapter.label}</div>
+        <h3 className="mt-2 font-display text-2xl font-black leading-tight md:text-4xl">{chapter.title}</h3>
+        <p className="mt-4 max-w-2xl leading-7 text-muted-foreground">{chapter.copy}</p>
+      </div>
+      <div className="chapter-proof">
+        <p>{chapter.detail}</p>
+        <div className="mt-5 flex flex-wrap gap-2">
+          {chapter.proof.map((item) => (
+            <span key={item} className="proof-pill">
+              {item}
+            </span>
+          ))}
+        </div>
+      </div>
+    </article>
+  );
+}
+
+function RoutineLogic() {
+  return (
+    <section className="routine-section">
+      <div className="container-page grid gap-10 py-16 md:grid-cols-[0.9fr_1.1fr] md:items-center md:py-24">
+        <div className="scroll-reveal">
+          <div className="chapter-kicker">
+            <span>Proof</span>
+            Why this box
+          </div>
+          <h2 className="font-display mt-4 text-4xl font-black leading-[1] md:text-6xl">
+            Product picks with visible reasons.
+          </h2>
+          <p className="mt-5 max-w-xl text-lg leading-8 text-muted-foreground">
+            Laffy connects scan signals, skin goals, sensitivity, and budget into a routine that explains itself before anything lands in the box.
+          </p>
+          <div className="mt-7 grid grid-cols-2 gap-3 sm:grid-cols-3">
+            {SIGNALS.map((signal) => (
+              <div key={signal} className="signal-tile">
+                <BadgeCheck className="h-4 w-4" />
+                {signal}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="routine-board scroll-reveal" data-cursor="soft">
+          <div className="routine-board-header">
+            <div>
+              <div className="text-eyebrow">Routine logic</div>
+              <h3 className="mt-1 text-2xl font-black">Personalized box draft</h3>
+            </div>
+            <Sparkles className="h-6 w-6 text-foreground" />
+          </div>
+          <div className="mt-6 grid gap-3">
+            {ROUTINE_PICKS.map((pick, index) => (
+              <div key={pick.role} className="routine-row">
+                <span>{String(index + 1).padStart(2, "0")}</span>
+                <strong>{pick.role}</strong>
+                <p>{pick.why}</p>
+              </div>
+            ))}
+          </div>
+          <Link to="/start" className="cta-primary mt-6 h-12 rounded-full px-6 text-sm font-extrabold text-primary-foreground">
+            Start Your Scan
+            <ArrowRight className="h-4 w-4" />
+          </Link>
         </div>
       </div>
     </section>
