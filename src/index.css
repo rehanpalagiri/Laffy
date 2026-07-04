@@ -140,6 +140,13 @@
   .surface-hero {
     background: var(--gradient-hero);
   }
+  .premium-hero {
+    background:
+      radial-gradient(circle at 78% 18%, hsl(var(--primary) / 0.44), transparent 26%),
+      radial-gradient(circle at 56% 58%, hsl(112 100% 78% / 0.16), transparent 20%),
+      radial-gradient(circle at 12% 92%, hsl(var(--secondary) / 0.82), transparent 30%),
+      linear-gradient(180deg, hsl(28 100% 99%) 0%, hsl(var(--background)) 58%, hsl(var(--secondary-soft)) 100%);
+  }
   .surface-texture {
     background: var(--gradient-texture), hsl(var(--card));
   }
@@ -150,6 +157,15 @@
   }
   .text-eyebrow {
     @apply text-xs uppercase tracking-[0.18em] text-muted-foreground font-medium;
+  }
+  .chapter-kicker {
+    @apply inline-flex items-center gap-3 text-xs font-extrabold uppercase tracking-[0.18em] text-muted-foreground;
+  }
+  .chapter-kicker span {
+    @apply rounded-full border border-foreground/10 bg-card/70 px-3 py-1 text-foreground shadow-soft backdrop-blur;
+  }
+  .laffy-wordmark {
+    @apply pointer-events-none absolute left-1/2 top-8 z-0 -translate-x-1/2 select-none font-display text-[24vw] font-black leading-none text-foreground/[0.035] md:top-2 md:text-[18rem];
   }
   .container-prose {
     @apply mx-auto max-w-3xl px-5;
@@ -167,6 +183,13 @@
   }
   .cta-primary:active {
     transform: translateY(0) scale(0.99);
+  }
+  .cta-ghost {
+    @apply inline-flex items-center justify-center gap-2 border border-foreground/10 bg-card/55 text-foreground shadow-soft backdrop-blur transition duration-300;
+  }
+  .cta-ghost:hover {
+    @apply bg-card;
+    transform: translateY(-2px);
   }
   .scan-card {
     @apply rounded-[2rem] border border-border/70 bg-card p-3 shadow-lift;
@@ -303,6 +326,128 @@
     @apply bottom-[15%] right-[2%] h-14 w-28 rotate-[18deg];
     animation: laffy-drift 9s ease-in-out infinite reverse;
   }
+  .skin-twin-stage {
+    @apply relative z-10 mx-auto aspect-square w-full max-w-[480px] rounded-[2rem] md:rounded-[3rem];
+    perspective: 1200px;
+  }
+  .skin-twin-stage::before {
+    content: "";
+    @apply absolute inset-[6%] rounded-full border border-primary/20;
+    transform: rotateX(68deg) rotateZ(-18deg);
+    box-shadow: 0 0 70px hsl(var(--primary) / 0.32);
+  }
+  .skin-twin-shell {
+    @apply absolute inset-0 transition-transform duration-200 ease-out-soft;
+    transform-style: preserve-3d;
+  }
+  .skin-twin-orb {
+    @apply absolute left-[15%] top-[13%] h-[66%] w-[66%] rounded-[36%] shadow-lift;
+    background:
+      radial-gradient(circle at 30% 22%, hsl(0 0% 100% / 0.95), transparent 19%),
+      radial-gradient(circle at 66% 66%, hsl(var(--secondary) / 0.9), transparent 24%),
+      linear-gradient(145deg, hsl(var(--primary)) 0%, hsl(var(--secondary)) 100%);
+    animation: skin-twin-float 8s ease-in-out infinite;
+    transform: translateZ(36px);
+  }
+  .scan-zone {
+    @apply absolute rounded-full border border-card/80 bg-card/25 backdrop-blur-sm;
+    box-shadow: inset 0 0 28px hsl(var(--primary) / 0.18), 0 14px 30px hsl(var(--foreground) / 0.06);
+  }
+  .scan-zone-one {
+    @apply left-[18%] top-[22%] h-16 w-24 rotate-[-12deg];
+  }
+  .scan-zone-two {
+    @apply right-[18%] top-[36%] h-20 w-16 rotate-[9deg];
+  }
+  .scan-zone-three {
+    @apply bottom-[20%] left-[34%] h-14 w-28 rotate-[4deg];
+  }
+  .scan-sweep {
+    @apply absolute inset-x-[12%] top-[20%] h-px bg-foreground/50;
+    animation: scan-sweep 4.8s ease-in-out infinite;
+    box-shadow: 0 0 18px hsl(112 100% 78% / 0.5);
+  }
+  .routine-box {
+    @apply absolute bottom-[11%] right-[3%] flex w-[46%] flex-col rounded-[1.6rem] border border-card/80 bg-card/75 p-5 shadow-lift backdrop-blur-md;
+    transform: translateZ(68px) rotateY(-8deg) rotateX(5deg);
+  }
+  .routine-box span {
+    @apply mb-4 block h-16 rounded-2xl bg-gradient-cream;
+    box-shadow: inset 0 0 0 1px hsl(var(--card) / 0.8), 0 16px 26px hsl(var(--primary) / 0.18);
+  }
+  .routine-box strong {
+    @apply text-sm font-black;
+  }
+  .routine-box small {
+    @apply mt-1 text-xs font-bold uppercase tracking-[0.14em] text-muted-foreground;
+  }
+  .ingredient-chip {
+    @apply absolute rounded-full border border-card/80 bg-card/75 px-4 py-2 text-xs font-black shadow-card backdrop-blur-md;
+    animation: ingredient-drift 7.5s ease-in-out infinite;
+  }
+  .ingredient-chip-one {
+    @apply left-[2%] top-[24%] rotate-[-11deg];
+  }
+  .ingredient-chip-two {
+    @apply right-[2%] top-[16%] rotate-[8deg];
+    animation-delay: -1.4s;
+  }
+  .ingredient-chip-three {
+    @apply bottom-[18%] left-[6%] rotate-[6deg];
+    animation-delay: -2.3s;
+  }
+  .chapter-section {
+    background:
+      linear-gradient(180deg, hsl(var(--card) / 0.46), hsl(var(--background))),
+      radial-gradient(circle at 85% 0%, hsl(var(--primary) / 0.16), transparent 30%);
+  }
+  .chapter-card {
+    @apply grid gap-5 rounded-[2rem] border border-border/70 bg-card/75 p-5 shadow-card backdrop-blur md:grid-cols-[86px_56px_minmax(0,1fr)_minmax(280px,0.72fr)] md:items-start md:p-7;
+  }
+  .chapter-card:hover {
+    @apply border-primary/45 bg-card/90 shadow-lift;
+    transform: translateY(-2px);
+    transition: transform var(--transition-base), box-shadow var(--transition-base), border-color var(--transition-base), background-color var(--transition-base);
+  }
+  .chapter-number {
+    @apply font-display text-3xl font-black leading-none text-primary md:text-4xl;
+  }
+  .chapter-icon {
+    @apply flex h-12 w-12 items-center justify-center rounded-2xl border border-primary/25 bg-primary-soft text-foreground shadow-soft;
+  }
+  .chapter-proof {
+    @apply rounded-[1.5rem] border border-border/60 bg-background/75 p-5 text-sm leading-6 text-muted-foreground;
+  }
+  .proof-pill {
+    @apply rounded-full border border-foreground/10 bg-card/80 px-3 py-1.5 text-xs font-extrabold uppercase tracking-[0.12em] text-foreground;
+  }
+  .routine-section {
+    background:
+      radial-gradient(circle at 14% 14%, hsl(var(--secondary) / 0.62), transparent 28%),
+      radial-gradient(circle at 82% 74%, hsl(var(--primary) / 0.2), transparent 30%),
+      hsl(var(--background));
+  }
+  .signal-tile {
+    @apply flex min-h-12 items-center gap-2 rounded-2xl border border-border/70 bg-card/75 px-4 py-3 text-sm font-extrabold shadow-soft backdrop-blur;
+  }
+  .routine-board {
+    @apply rounded-[2rem] border border-foreground/10 bg-card/75 p-5 shadow-lift backdrop-blur md:p-7;
+  }
+  .routine-board-header {
+    @apply flex items-start justify-between gap-5 rounded-[1.5rem] bg-gradient-soft p-5;
+  }
+  .routine-row {
+    @apply grid gap-2 rounded-[1.35rem] border border-border/70 bg-background/75 p-4 sm:grid-cols-[44px_96px_minmax(0,1fr)] sm:items-center;
+  }
+  .routine-row span {
+    @apply font-display text-2xl font-black text-primary;
+  }
+  .routine-row strong {
+    @apply text-base font-black;
+  }
+  .routine-row p {
+    @apply text-sm leading-6 text-muted-foreground;
+  }
 }
 
 @keyframes scan-line {
@@ -328,6 +473,31 @@
 @keyframes laffy-drift {
   0%, 100% { transform: translateY(0) rotate(var(--tw-rotate)); }
   50% { transform: translateY(-14px) rotate(var(--tw-rotate)); }
+}
+
+@keyframes skin-twin-float {
+  0%, 100% { transform: translateZ(36px) translateY(0) rotateX(4deg) rotateY(-8deg); border-radius: 36% 44% 42% 34%; }
+  50% { transform: translateZ(52px) translateY(-12px) rotateX(-2deg) rotateY(10deg); border-radius: 46% 35% 39% 48%; }
+}
+
+@keyframes scan-sweep {
+  0%, 100% { top: 18%; opacity: 0.25; }
+  48%, 58% { top: 78%; opacity: 0.85; }
+}
+
+@keyframes ingredient-drift {
+  0%, 100% { transform: translateY(0) rotate(var(--tw-rotate)); }
+  50% { transform: translateY(-12px) rotate(var(--tw-rotate)); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skin-twin-orb,
+  .scan-sweep,
+  .ingredient-chip,
+  .laffy-orb-core,
+  .laffy-capsule {
+    animation: none !important;
+  }
 }
 
 @media (pointer: fine) and (min-width: 900px) {
